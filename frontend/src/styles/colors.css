@@ -1,0 +1,34 @@
+/**
+ * Adwide Media — Agero-inspired light theme tokens.
+ */
+
+:root {
+  --brand-primary: #ff5c00;
+  --brand-primary-foreground: #ffffff;
+  --brand-accent: #ff4d17;
+  --brand-accent-foreground: #ffffff;
+  --brand-secondary: #1a1a1a;
+
+  --surface-page: #f2f2f2;
+  --surface-elevated: #ffffff;
+  --surface-muted: #e8e8e8;
+  --surface-inverse: #1a1a1a;
+  --header-cta: #4d4d4d;
+  --header-nav: #666666;
+  --header-tab: #333333;
+  --surface-card: #ececec;
+
+  --text-primary: #111111;
+  --text-secondary: #4a4a4a;
+  --text-muted: #7a7a7a;
+  --text-inverse: #f5f5f5;
+
+  --border-default: #dddddd;
+  --border-strong: #c9c9c9;
+  --ring-focus: #ff4d17;
+
+  --status-available: #22c55e;
+
+  --background: var(--surface-page);
+  --foreground: var(--text-primary);
+}
