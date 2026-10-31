@@ -379,3 +379,4 @@ export function getAdjacentServices(currentSlug: string): {
     next: serviceDetails[nextIndex],
   };
 }
+

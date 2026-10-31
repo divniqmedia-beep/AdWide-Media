@@ -240,3 +240,4 @@ export default async function ServiceDetailPage({
     </PageShell>
   );
 }
+

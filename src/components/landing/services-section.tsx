@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Reveal, RevealItem, Stagger } from "@/components/motion/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -46,25 +47,28 @@ function ServicePreviewCard({ service }: { service: Service }) {
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="relative w-full"
     >
-      <div className="relative overflow-hidden rounded-[1.5rem] bg-[#141414] shadow-[0_36px_90px_rgba(0,0,0,0.22)] ring-1 ring-black/15 sm:rounded-[2rem]">
+      <Link
+        href={`/services/${service.id}`}
+        className="group block overflow-hidden rounded-[1.5rem] bg-[#141414] shadow-[0_36px_90px_rgba(0,0,0,0.22)] ring-1 ring-black/15 transition-transform duration-300 hover:scale-[1.01] sm:rounded-[2rem]"
+      >
         <div className="relative aspect-[16/11] w-full lg:aspect-[16/12]">
           <Image
             src={service.image}
             alt={service.imageAlt}
             fill
-            className="object-cover object-center"
+            className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 1024px) 92vw, 720px"
             priority={service.id === "brand-identity"}
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/45 via-transparent to-black/10" />
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 }
 
 export function ServicesSection() {
-  const [activeId, setActiveId] = useState<Service["id"]>(services[0].id);
+  const [activeId, setActiveId] = useState<string>(services[0].id);
   const active = services.find((service) => service.id === activeId) ?? services[0];
 
   return (
@@ -137,16 +141,27 @@ export function ServicesSection() {
 
               <div className="relative z-10 mt-6 max-w-xl lg:mt-8">
                 <AnimatePresence mode="wait">
-                  <motion.p
+                  <motion.div
                     key={active.id}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.28 }}
-                    className={`text-sm leading-relaxed sm:text-base ${c.text.secondary}`}
+                    className="space-y-3"
                   >
-                    {active.caption}
-                  </motion.p>
+                    <p className={`text-sm leading-relaxed sm:text-base ${c.text.secondary}`}>
+                      {active.caption}
+                    </p>
+                    <div>
+                      <Link
+                        href={`/services/${active.id}`}
+                        className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-brand-primary transition-all hover:gap-3"
+                      >
+                        <span>View {active.title} Details</span>
+                        <span aria-hidden>→</span>
+                      </Link>
+                    </div>
+                  </motion.div>
                 </AnimatePresence>
               </div>
             </Reveal>
