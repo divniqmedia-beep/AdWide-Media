@@ -35,7 +35,7 @@ export function WorkGrid() {
                 <p className={`text-sm tabular-nums ${c.text.muted}`}>
                   {String(index + 1).padStart(2, "0")} / {String(works.length).padStart(2, "0")}
                 </p>
-                <h2 className={`mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl ${c.text.primary}`}>
+                <h2 className={`mt-3 font-display text-3xl font-normal tracking-normal [word-spacing:0.12em] sm:text-4xl ${c.text.primary}`}>
                   {work.title}
                 </h2>
                 <p className={`mt-4 text-sm leading-relaxed sm:text-base ${c.text.secondary}`}>

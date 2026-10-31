@@ -32,7 +32,7 @@ export function LegalPage({ tag, title, updated, intro, sections }: LegalPagePro
         <div className="space-y-8">
           {sections.map((section, index) => (
             <Reveal key={section.heading} as="article" variant="fadeUp" delay={Math.min(index * 0.05, 0.2)}>
-              <h2 className={`font-display text-2xl font-bold tracking-tight ${c.text.primary}`}>
+              <h2 className={`font-display text-2xl font-normal tracking-normal [word-spacing:0.12em] ${c.text.primary}`}>
                 {index + 1}. {section.heading}
               </h2>
               <p className={`mt-3 text-sm leading-relaxed sm:text-base ${c.text.secondary}`}>

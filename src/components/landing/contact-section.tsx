@@ -81,7 +81,7 @@ export function ContactSection() {
                 </div>
               </Reveal>
 
-              <Reveal as="h2" variant="fadeUp" delay={0.08} className="font-display text-[clamp(2.6rem,7vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.045em]">
+              <Reveal as="h2" variant="fadeUp" delay={0.08} className="font-display text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] font-normal leading-[1.11] tracking-normal [word-spacing:0.12em]">
                 Ready to
                 <br />
                 Scale Your

@@ -6,7 +6,7 @@ import { colorClasses as c } from "@/lib/colors";
 
 /** Shared section title style — centered, display font, dual-tone black + orange. */
 export const sectionHeadingClassName =
-  "text-center font-display text-[clamp(2.5rem,5.5vw,3.75rem)] font-bold leading-[1.05] tracking-tight";
+  "text-center font-display text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] font-normal leading-[1.11] tracking-normal [word-spacing:0.12em]";
 
 type SectionHeadingProps = {
   /** Black (or white on dark) portion of the heading. */
@@ -36,7 +36,8 @@ function DualToneTitle({
   if (accent) {
     return (
       <>
-        {title ? <span className={leadClass}>{title} </span> : null}
+        {title ? <span className={leadClass}>{title}</span> : null}
+        {title ? " " : null}
         <span className={c.text.brand}>{accent}</span>
       </>
     );
@@ -52,7 +53,7 @@ function DualToneTitle({
 
   return (
     <>
-      <span className={leadClass}>{lead} </span>
+      <span className={leadClass}>{lead}</span>{" "}
       <span className={c.text.brand}>{end}</span>
     </>
   );

@@ -24,7 +24,7 @@ export function LandingShell() {
         <StatsTestimonialsSection />
         <WorksSection />
         <ServicesSection />
-        <FoundersSection /> 
+        {/* <FoundersSection />  */}
         <FaqSection />
         <ContactSection />
       </main>

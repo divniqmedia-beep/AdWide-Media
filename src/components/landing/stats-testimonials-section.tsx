@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { colorClasses as c } from "@/lib/colors";
 import { stats, testimonials } from "@/lib/site-content";
 import { testimonialsMedia } from "@/lib/testimonials-media";
@@ -19,36 +18,49 @@ export function StatsTestimonialsSection() {
 
   return (
     <section
-      className={`relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24 ${c.bg.page}`}
+      className={`relative overflow-hidden px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-14 lg:px-10 lg:pb-24 lg:pt-16 ${c.bg.page}`}
     >
-      <div className="relative mx-auto max-w-6xl">
-        <SectionHeading
-          title="Our"
-          accent="Testimonials"
-          className="mb-10 sm:mb-12"
-        />
+      <div className="relative mx-auto max-w-[80rem]">
+        {/* Giant watermark title overlapping the cards */}
+        <div className="relative -mb-10 sm:-mb-24 lg:-mb-13 flex justify-center select-none pointer-events-none">
+          <span
+            aria-hidden
+            className="font-display text-[clamp(4.5rem,13vw,11.5rem)] font-normal leading-none tracking-normal text-transparent bg-clip-text select-none"
+            style={{
+              backgroundImage:
+                "linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.08) 58%, rgba(0, 0, 0, 0.01) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Testimonials
+          </span>
+        </div>
 
-        <div className="relative isolate z-10 grid gap-5 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.55fr)] lg:gap-6">
+        <div className="relative isolate z-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.15fr)] lg:gap-6">
+          {/* Stats Card */}
           <Reveal
             as="article"
             variant="fadeLeft"
-            className="relative min-h-[400px] overflow-hidden rounded-[1.75rem] sm:min-h-[460px] lg:min-h-[520px]"
+            className="relative min-h-[440px] overflow-hidden rounded-[24px] sm:min-h-[480px] lg:min-h-[520px] bg-[#0c0c0c]"
           >
-            <Image
-              src={testimonialsMedia.statsBackground}
-              alt=""
-              fill
-              className="object-cover object-center"
-              sizes="(max-width: 1024px) 100vw, 380px"
+            <video
+              src={testimonialsMedia.statsVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover opacity-90"
             />
-            <div className="absolute inset-0 z-[1] bg-black/50" />
-            <div className="absolute inset-0 z-10 flex flex-col justify-between p-8 sm:p-9 lg:p-10">
+            <div className="absolute inset-0 z-[1] bg-black/40" />
+
+            <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-9 lg:p-10">
               {stats.map((stat, i) => (
                 <Reveal key={stat.label} variant="fadeUp" delay={0.08 + i * 0.08}>
-                  <p className="font-display text-[clamp(2.25rem,5vw,3.25rem)] font-bold leading-none tracking-tight text-white">
+                  <p className="font-display text-[clamp(2.75rem,5.5vw,4.25rem)] font-normal leading-none tracking-normal text-white">
                     {stat.value}
                   </p>
-                  <p className="mt-2 max-w-[12rem] text-sm leading-snug text-white/72">
+                  <p className="mt-2 text-xs sm:text-[0.8125rem] font-medium text-white/70 leading-snug">
                     {stat.label}
                   </p>
                 </Reveal>
@@ -56,11 +68,12 @@ export function StatsTestimonialsSection() {
             </div>
           </Reveal>
 
+          {/* Testimonial Card */}
           <Reveal
             as="article"
             variant="fadeRight"
             delay={0.08}
-            className="relative min-h-[400px] overflow-hidden rounded-[1.75rem] sm:min-h-[460px] lg:min-h-[520px] lg:z-20"
+            className="relative min-h-[440px] overflow-hidden rounded-[24px] sm:min-h-[480px] lg:min-h-[520px] lg:z-20"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -68,7 +81,7 @@ export function StatsTestimonialsSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-0 z-0"
               >
                 <Image
@@ -76,57 +89,87 @@ export function StatsTestimonialsSection() {
                   alt={active.imageAlt}
                   fill
                   className="object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 820px"
+                  sizes="(max-width: 1024px) 100vw, 860px"
                   priority={index === 0}
                 />
               </motion.div>
             </AnimatePresence>
 
-            <div className="pointer-events-none absolute inset-0 z-[1] bg-linear-to-t from-black/80 via-black/35 to-black/15" />
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-black/40 backdrop-blur-[1px]" />
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/85 via-transparent to-black/25" />
 
-            <div className="absolute inset-0 z-10 flex flex-col justify-between p-8 sm:p-9 lg:p-10">
-              <p className="relative z-10 text-sm font-medium tabular-nums text-white/88">
-                {String(index + 1).padStart(2, "0")} /{" "}
-                {String(testimonials.length).padStart(2, "0")}
-              </p>
+            <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-9 lg:p-10 text-white">
+              {/* Counter */}
+              <div className="flex items-center text-sm font-medium tabular-nums">
+                <span className="text-white">{String(index + 1).padStart(2, "0")}</span>
+                <span className="text-white/60"> / {String(testimonials.length).padStart(2, "0")}</span>
+              </div>
 
-              <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+              {/* Bottom Quote + Author + Navigation */}
+              <div className="space-y-6 sm:space-y-7">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
+                    exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative z-10 max-w-xl"
+                    className="max-w-2xl"
                   >
-                    <p className="text-[clamp(1.25rem,2.5vw,1.65rem)] font-semibold leading-snug text-white">
-                      &ldquo;{active.quote}&rdquo;
+                    <p className="font-display text-xl sm:text-2xl lg:text-[28px] lg:leading-[36px] font-normal leading-snug tracking-normal text-white">
+                      &ldquo;{active.quote.replace(/^["“”]|["“”]$/g, "")}&rdquo;
                     </p>
-                    <div className="mt-6">
-                      <p className="text-base font-semibold text-white">{active.name}</p>
-                      <p className="mt-0.5 text-sm text-white/72">{active.role}</p>
-                    </div>
                   </motion.div>
                 </AnimatePresence>
 
-                <div className="flex shrink-0 gap-3 self-end lg:self-auto">
-                  <button
-                    type="button"
-                    onClick={prev}
-                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/40 text-xl text-white backdrop-blur-md transition-opacity hover:opacity-90"
-                    aria-label="Previous testimonial"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    onClick={next}
-                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/40 text-xl text-white backdrop-blur-md transition-opacity hover:opacity-90"
-                    aria-label="Next testimonial"
-                  >
-                    ›
-                  </button>
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <p className="font-sans text-sm sm:text-base font-semibold text-white">
+                      {active.name}
+                    </p>
+                    <p className="font-sans mt-0.5 text-xs sm:text-sm text-white/65">
+                      {active.role}
+                    </p>
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={prev}
+                      aria-label="Previous testimonial"
+                      className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white backdrop-blur-md transition-all active:scale-95"
+                    >
+                      <svg
+                        className="size-4.5 sm:size-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="15 18 9 12 15 6" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={next}
+                      aria-label="Next testimonial"
+                      className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white backdrop-blur-md transition-all active:scale-95"
+                    >
+                      <svg
+                        className="size-4.5 sm:size-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

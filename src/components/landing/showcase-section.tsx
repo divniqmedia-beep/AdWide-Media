@@ -10,7 +10,7 @@ export function ShowcaseSection() {
     <section>
       <Reveal
         variant="fadeUp"
-        className="showcase-banner relative h-screen w-full overflow-hidden bg-[#080808]"
+        className="showcase-banner relative h-[55vh] min-h-[360px] sm:h-[75vh] sm:min-h-[500px] lg:h-screen lg:min-h-[640px] w-full overflow-hidden bg-[#080808]"
       >
         <Image
           src={showcaseCollageImage.src}

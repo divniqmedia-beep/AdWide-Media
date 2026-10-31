@@ -32,14 +32,14 @@ export function HeroInlineRise({
 }: HeroInlineRiseProps) {
   const shell =
     variant === "phone"
-      ? "relative mx-2 inline-block h-16 w-[5.0625rem] align-[-0.22em]"
+      ? "relative mx-1.5 sm:mx-2 inline-block h-10 w-14 sm:h-14 sm:w-20 lg:h-16 lg:w-[5.0625rem] align-[-0.22em]"
       : variant === "pill"
-        ? "relative mx-2 inline-block h-[3.1rem] w-[4.6rem] align-[-0.2em] sm:mx-2.5 sm:h-16 sm:w-[5.25rem] lg:h-[4.15rem] lg:w-[6.5rem]"
-        : "relative mx-2 inline-block h-[3.35rem] w-[3.35rem] align-[-0.18em] sm:mx-2.5 sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem]";
+        ? "relative mx-1.5 sm:mx-2.5 inline-block h-10 w-14 sm:h-14 sm:w-20 lg:h-[4.15rem] lg:w-[6.5rem] align-[-0.2em]"
+        : "relative mx-1.5 sm:mx-2.5 inline-block h-10 w-10 sm:h-14 sm:w-14 lg:h-[4.25rem] lg:w-[4.25rem] align-[-0.18em]";
 
   const image =
     variant === "phone"
-      ? "h-16 w-[5.0625rem] rounded-[999px] object-cover shadow-[0_3px_12px_rgba(0,0,0,0.14)] ring-1 ring-black/8"
+      ? "h-full w-full rounded-[999px] object-cover shadow-[0_3px_12px_rgba(0,0,0,0.14)] ring-1 ring-black/8"
       : variant === "pill"
         ? framed
           ? "relative h-full w-full rounded-[999px] object-cover p-[3px]"
@@ -62,7 +62,7 @@ export function HeroInlineRise({
         width={width}
         height={height}
         className={`${image} ${imageClassName}`}
-        priority
+        sizes="(max-width: 640px) 56px, (max-width: 1024px) 80px, 104px"
       />
     </motion.span>
   );

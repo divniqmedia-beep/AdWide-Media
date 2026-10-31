@@ -24,7 +24,7 @@ const fadeUp = {
 const T = 180;
 
 const titleClass =
-  "font-display font-bold tracking-[-0.035em] text-[clamp(2.125rem,5.4vw,4.5rem)] leading-[1.1] sm:leading-[1.08]";
+  "font-display font-normal tracking-normal [word-spacing:0.12em] text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] leading-[1.11]";
 
 export function HeroSection() {
   return (
@@ -62,8 +62,8 @@ export function HeroSection() {
         </motion.div>
 
         <div className="text-center">
-          <h1 className={titleClass}>
-            <span className={`flex flex-wrap items-center justify-center whitespace-normal ${c.text.primary}`}>
+          <h1 className={`${titleClass} flex flex-col items-center gap-1 sm:gap-1.5 lg:gap-2`}>
+            <span className={`flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 lg:gap-[18px] whitespace-normal ${c.text.primary}`}>
               <HeroBlurText text="Marketing" startDelay={T * 0} className="justify-center" />
               <HeroInlineRise
                 src={heroInlineMedia.phone.src}
@@ -72,6 +72,7 @@ export function HeroSection() {
                 width={81}
                 height={64}
                 delay={(T * 1) / 1000}
+                className="mx-0"
               />
               <HeroBlurText
                 text="that"
@@ -79,7 +80,7 @@ export function HeroSection() {
                 className={`justify-center ${c.text.brand}`}
               />
             </span>
-            <span className="flex flex-wrap items-center justify-center whitespace-normal">
+            <span className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 lg:gap-[18px] whitespace-normal">
               <HeroBlurText
                 text="moves"
                 startDelay={T * 3}
@@ -92,6 +93,7 @@ export function HeroSection() {
                 width={64}
                 height={64}
                 delay={(T * 4) / 1000}
+                className="mx-0"
               />
               <HeroBlurText
                 text="you"
@@ -99,7 +101,7 @@ export function HeroSection() {
                 className={`justify-center ${c.text.primary}`}
               />
             </span>
-            <span className={`flex flex-wrap items-center justify-center whitespace-normal ${c.text.primary}`}>
+            <span className={`flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 lg:gap-[18px] whitespace-normal ${c.text.primary}`}>
               <HeroBlurText text="forward" startDelay={T * 6} className="justify-center" />
               <HeroInlineRise
                 src={heroInlineMedia.landmark.src}
@@ -108,6 +110,7 @@ export function HeroSection() {
                 width={64}
                 height={64}
                 delay={(T * 7) / 1000}
+                className="mx-0"
               />
             </span>
           </h1>

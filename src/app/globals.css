@@ -31,8 +31,11 @@
   --color-header-nav: var(--header-nav);
   --color-header-tab: var(--header-tab);
 
-  --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-syne);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-cal-sans);
+  --font-heading: var(--font-cal-sans);
+  --font-inter: var(--font-inter);
+  --font-cal-sans: var(--font-cal-sans);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -44,6 +47,35 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display), "Cal Sans", sans-serif;
+  letter-spacing: 0px;
+  word-spacing: 0.12em;
+}
+
+h1,
+h2 {
+  font-size: clamp(2.5rem, 5.5vw, 72px);
+  line-height: 1.11;
+}
+
+@media (min-width: 1024px) {
+  h1,
+  h2 {
+    font-size: 72px;
+    line-height: 80px;
+  }
+}
+
+p {
+  font-family: var(--font-sans), Inter, system-ui, sans-serif;
 }
 
 @keyframes marquee-left {

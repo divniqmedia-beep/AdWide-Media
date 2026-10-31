@@ -117,32 +117,32 @@ export const statementCapabilityPills = [
 export const testimonialsSectionTag = "(Why clients choose Adwide)";
 
 export const stats = [
-  { value: "120+", label: "Campaigns delivered" },
-  { value: "94%", label: "Client satisfaction rate" },
-  { value: "50M+", label: "Views generated" },
+  { value: "26+", label: "Finalized Projects" },
+  { value: "98%", label: "Client satisfaction rate" },
+  { value: "10M", label: "Gross Revenue" },
 ] as const;
 
 export const testimonials = [
   {
     quote:
-      "Adwide turned our brand story into scroll-stopping content. Creative quality and performance both improved within weeks.",
-    name: "Priya Sharma",
-    role: "Founder, Bloom India",
-    imageAlt: "Team collaborating in a modern office",
+      "Franklin turned our ideas into a sharp, clean brand. Fast, easy, and right on point.",
+    name: "Ethan Moore",
+    role: "Co-founder, NovaTech",
+    imageAlt: "Laptop on beach showcasing brand identity",
   },
   {
     quote:
-      "Clear, thoughtful, and fast — the team made our launch campaign feel effortless from brief to go-live.",
+      "Clear, thoughtful, and fast — Franklin made the whole process effortless.",
     name: "Olivia Tran",
     role: "Creative Director, Bloom Agency",
     imageAlt: "Premium product packaging and brand materials",
   },
   {
     quote:
-      "Premium production with data-backed optimization — our conversions finally matched the look and feel of our brand.",
-    name: "Sneha Kapoor",
-    role: "Marketing Lead, Lifestyle Co.",
-    imageAlt: "Creative workspace with campaign planning",
+      "Smart design, smooth delivery. Franklin is great to work with.",
+    name: "Lucas Bennett",
+    role: "Product Manager, Hexa Studio",
+    imageAlt: "Modern workspace with digital interfaces",
   },
 ] as const;
 

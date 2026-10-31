@@ -9,9 +9,8 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { colorClasses as c } from "@/lib/colors";
-import { works } from "@/lib/site-content";
+import { works, worksIntro } from "@/lib/site-content";
 import { worksImages } from "@/lib/works-media";
 
 const WORK_COUNT = works.length;
@@ -19,13 +18,11 @@ const WORK_COUNT = works.length;
 const cardSpring = { stiffness: 42, damping: 26, mass: 0.65, restDelta: 0.0005 };
 /** Shared window: the slide in front recedes while the next one rises over it. */
 const HANDOFF = 0.52;
-/** Last slide settles in front and does not recede. */
-const V_END = WORK_COUNT - HANDOFF;
-/** One viewport per card-step, including the opening rise and the final hold. */
-const SCROLL_VIEWPORTS = V_END + 1;
+/** One viewport per card-step plus smooth handoff. */
+const SCROLL_VIEWPORTS = WORK_COUNT + 0.6;
 
 function deckProgress(raw: number) {
-  return raw * SCROLL_VIEWPORTS - 1;
+  return raw * (WORK_COUNT - 0.4);
 }
 
 type CardMotion = {
@@ -198,7 +195,7 @@ function WorkStackCard({
         zIndex,
         transformOrigin: "50% 50%",
       }}
-      className="absolute inset-0 overflow-hidden shadow-[0_28px_70px_rgba(0,0,0,0.28)] ring-1 ring-black/10 will-change-transform sm:rounded-[2rem]"
+      className="absolute inset-0 overflow-hidden shadow-[0_28px_70px_rgba(0,0,0,0.28)] ring-1 ring-black/10 will-change-transform rounded-[24px] sm:rounded-[2rem]"
     >
       <Image
         src={imageSrc}
@@ -214,43 +211,53 @@ function WorkStackCard({
       <div className="absolute inset-0 bg-linear-to-br from-black/40 via-black/15 to-black/45" />
       <motion.div style={{ opacity: wash }} className="absolute inset-0 bg-white" />
 
-      <div className="relative z-10 grid h-full gap-6 overflow-y-auto p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] lg:items-center lg:gap-12 lg:overflow-hidden lg:p-12 xl:gap-16 xl:px-16 xl:py-14">
-        <div className="flex flex-col justify-between gap-8 text-white lg:min-h-[min(52vh,420px)] lg:py-2">
-          <p className="text-sm tabular-nums text-white/80">
-            {String(index + 1).padStart(2, "0")} / {String(WORK_COUNT).padStart(2, "0")}
-          </p>
-          <p className="max-w-md text-sm leading-relaxed text-white/92 sm:text-base lg:text-lg">
+      <div className="relative z-10 grid h-full gap-4 sm:gap-6 overflow-y-auto p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] lg:items-center lg:gap-10 lg:overflow-hidden lg:p-12 xl:gap-14 xl:px-14 xl:py-12">
+        {/* Left Column: Intro & Description */}
+        <div className="flex flex-col justify-between gap-3 sm:gap-5 text-white lg:min-h-[min(48vh,380px)] lg:py-2">
+          <div className="space-y-1.5 sm:space-y-2.5">
+            <p className="text-xs sm:text-sm tabular-nums text-white/60">
+              {String(index + 1).padStart(2, "0")} / {String(WORK_COUNT).padStart(2, "0")}
+            </p>
+            <p className="max-w-xs text-xs sm:text-sm leading-relaxed text-white/70">
+              {worksIntro}
+            </p>
+          </div>
+          <p className="max-w-md text-xs sm:text-sm leading-relaxed text-white/92 md:text-base lg:text-lg">
             {work.description}
           </p>
         </div>
 
-        <div className="relative mx-auto flex h-full w-full max-w-xl items-center justify-center lg:max-w-none">
-          <div className="relative aspect-[4/5] w-full max-h-[min(58vh,680px)] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/30 sm:aspect-[3/4] lg:aspect-[4/5]">
+        {/* Center Column: Project Mockup Preview */}
+        <div className="relative mx-auto flex h-full w-full max-w-[280px] sm:max-w-md items-center justify-center lg:max-w-none">
+          <div className="relative aspect-[4/5] w-full max-h-[min(38vh,360px)] sm:max-h-[min(50vh,560px)] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/25 sm:aspect-[3/4] lg:aspect-[4/5]">
             <Image
               src={imageSrc}
               alt={`${work.title} project preview`}
               fill
               className="object-cover object-center"
-              sizes="(max-width: 1024px) 90vw, 560px"
+              sizes="(max-width: 640px) 280px, (max-width: 1024px) 70vw, 560px"
             />
           </div>
         </div>
 
-        <div className="space-y-6 text-white lg:space-y-8 lg:pl-2">
-          <h3 className="font-display text-[clamp(2.25rem,4.5vw,3.75rem)] font-bold leading-none tracking-tight">
+        {/* Right Column: Title, Year, Role, Services */}
+        <div className="space-y-4 text-white sm:space-y-6 lg:space-y-8 lg:pl-2">
+          <h3 className="font-display text-[clamp(1.75rem,4vw,3.75rem)] font-normal leading-none tracking-normal">
             {work.title}
           </h3>
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-white/60">Year</p>
-            <p className="mt-1.5 text-3xl font-semibold tabular-nums sm:text-4xl">{work.year}</p>
+          <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-col sm:gap-0 sm:space-y-5">
+            <div>
+              <p className="text-[10px] sm:text-xs uppercase tracking-[0.18em] text-white/60">Year</p>
+              <p className="mt-1 font-display text-xl sm:text-2xl lg:text-3xl font-normal tabular-nums text-white">{work.year}</p>
+            </div>
+            <div>
+              <p className="text-[10px] sm:text-xs uppercase tracking-[0.18em] text-white/60">Role</p>
+              <p className="mt-1 text-sm sm:text-base font-medium lg:text-lg">{work.role}</p>
+            </div>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-white/60">Role</p>
-            <p className="mt-1.5 text-base font-medium sm:text-lg">{work.role}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-white/60">Services</p>
-            <ul className="mt-2 space-y-1.5 text-sm text-white/90 sm:text-base">
+            <p className="text-[10px] sm:text-xs uppercase tracking-[0.18em] text-white/60">Services</p>
+            <ul className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-xs text-white/90 sm:block sm:space-y-1.5 sm:text-sm lg:text-base">
               {work.services.map((service) => (
                 <li key={service}>{service}</li>
               ))}
@@ -271,9 +278,8 @@ export function WorksSection() {
 
   const smoothProgress = useSpring(scrollYProgress, cardSpring);
 
-  const titleY = useTransform(smoothProgress, [0, 0.22], ["0vh", "-12vh"]);
-  const titleOpacity = useTransform(smoothProgress, [0, 0.08, 0.2], [1, 1, 0]);
-  const titleScale = useTransform(smoothProgress, [0, 0.22], [1, 0.94]);
+  const titleY = useTransform(smoothProgress, [0, 0.22], ["0vh", "-6vh"]);
+  const titleOpacity = useTransform(smoothProgress, [0, 0.08, 0.22], [1, 1, 0.2]);
 
   return (
     <section
@@ -282,25 +288,40 @@ export function WorksSection() {
       className={`relative ${c.bg.page}`}
       style={{ height: `${SCROLL_VIEWPORTS * 100}vh` }}
     >
-      <div className="sticky top-0 flex h-screen w-full flex-col overflow-hidden">
-        <motion.div
-          style={{ y: titleY, opacity: titleOpacity, scale: titleScale }}
-          className="pointer-events-none z-[400] flex shrink-0 flex-col items-center px-4 pb-1 pt-2 sm:pb-1.5 sm:pt-3"
-        >
-          <SectionHeading title="Recent" accent="Works" animate={false} />
-        </motion.div>
+      <div className="sticky top-0 flex h-screen w-full flex-col justify-start overflow-hidden px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6">
+        <div className="relative mx-auto w-full max-w-[80rem] flex flex-col h-full">
+          {/* Giant watermark heading under the cards - matches StatsTestimonialsSection */}
+          <motion.div
+            style={{ y: titleY, opacity: titleOpacity }}
+            className="pointer-events-none relative -mb-10 sm:-mb-20 lg:-mb-28 flex justify-center select-none z-0 shrink-0"
+          >
+            <span
+              aria-hidden
+              className="font-display text-[clamp(4.5rem,13vw,11.5rem)] font-normal leading-none tracking-normal text-transparent bg-clip-text select-none text-center"
+              style={{
+                backgroundImage:
+                  "linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.08) 58%, rgba(0, 0, 0, 0.01) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Recent Works
+            </span>
+          </motion.div>
 
-        <div
-          className="relative min-h-0 flex-1 px-0 sm:px-3 sm:pb-3"
-          style={{ perspective: "2200px", perspectiveOrigin: "50% 46%" }}
-        >
-          {works.map((work, index) => (
-            <WorkStackCard
-              key={work.title}
-              index={index}
-              scrollYProgress={smoothProgress}
-            />
-          ))}
+          {/* Card Stage - sits on top of the watermark with z-10 */}
+          <div
+            className="relative isolate z-10 min-h-0 flex-1 pb-4 sm:pb-6"
+            style={{ perspective: "2200px", perspectiveOrigin: "50% 46%" }}
+          >
+            {works.map((work, index) => (
+              <WorkStackCard
+                key={work.title}
+                index={index}
+                scrollYProgress={smoothProgress}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

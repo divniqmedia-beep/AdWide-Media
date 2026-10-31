@@ -29,7 +29,7 @@ export function PageHero({ tag, title, description }: PageHeroProps) {
         distance={40}
         startDelay={200}
         as="h1"
-        className={`max-w-4xl justify-start font-display text-[clamp(2.5rem,7vw,5rem)] font-bold leading-[0.95] tracking-tight ${c.text.primary}`}
+        className={`max-w-4xl justify-start font-display text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] font-normal leading-[1.11] tracking-normal [word-spacing:0.12em] ${c.text.primary}`}
       />
       {description ? (
         <HeroBlurText

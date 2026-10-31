@@ -121,11 +121,11 @@ function FounderBlock({ founder, index }: { founder: Founder; index: number }) {
           </RevealItem>
           <RevealItem>
             <h2
-              className={`mt-3 font-display text-[clamp(2.75rem,5.5vw,4.25rem)] font-bold leading-[0.95] tracking-tight ${c.text.primary}`}
+              className={`mt-3 font-display text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] font-normal leading-[1.11] tracking-normal [word-spacing:0.12em] ${c.text.primary}`}
             >
               {founder.name.split(" ").length > 1 ? (
                 <>
-                  <span>{founder.name.split(" ").slice(0, -1).join(" ")} </span>
+                  <span>{founder.name.split(" ").slice(0, -1).join(" ")}</span>{" "}
                   <span className={c.text.brand}>{founder.name.split(" ").at(-1)}</span>
                 </>
               ) : (

@@ -11,14 +11,14 @@ import { worksImages } from "@/lib/works-media";
 const T = 180;
 
 const titleClass =
-  "font-display font-bold tracking-[-0.04em] text-[clamp(2.15rem,6.4vw,4.75rem)] leading-[1.08] sm:leading-[1.05]";
+  "font-display font-normal tracking-normal [word-spacing:0.12em] text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] leading-[1.11]";
 
 export function WorkHero() {
   return (
     <section className={`relative overflow-hidden ${c.bg.page}`}>
       <div className="mx-auto max-w-[980px] px-4 pb-14 pt-10 text-center sm:px-6 sm:pb-16 sm:pt-14 lg:pt-16">
-        <h1 className={titleClass}>
-          <span className="flex flex-wrap items-center justify-center whitespace-normal">
+        <h1 className={`${titleClass} flex flex-col items-center gap-1 sm:gap-1.5 lg:gap-2`}>
+          <span className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 lg:gap-[18px] whitespace-normal">
             <HeroBlurText
               text={workHero.line1Lead}
               startDelay={T * 0}
@@ -32,6 +32,7 @@ export function WorkHero() {
               height={66}
               framed
               delay={(T * 2) / 1000}
+              className="mx-0"
             />
             <HeroBlurText
               text={workHero.line1Accent}
@@ -39,7 +40,7 @@ export function WorkHero() {
               className={`justify-center ${c.text.brand}`}
             />
           </span>
-          <span className="flex flex-wrap items-center justify-center whitespace-normal">
+          <span className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 lg:gap-[18px] whitespace-normal">
             <HeroBlurText
               text={workHero.line2Muted}
               startDelay={T * 5}
@@ -52,6 +53,7 @@ export function WorkHero() {
               width={68}
               height={68}
               delay={(T * 7) / 1000}
+              className="mx-0"
             />
             <HeroBlurText
               text={workHero.line2End}
