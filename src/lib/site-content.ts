@@ -14,6 +14,7 @@ export const navLinks = [
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Our Work", href: "/work" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -118,7 +119,7 @@ export const testimonialsSectionTag = "(Why clients choose Adwide)";
 
 export const stats = [
   { value: "26+", label: "Finalized Projects" },
-  { value: "98%", label: "Client satisfaction rate" },
+  { value: "100%", label: "Client satisfaction rate" },
   { value: "10M", label: "Gross Revenue" },
 ] as const;
 
@@ -206,7 +207,8 @@ export const services = [
     title: "Brand Identity",
     caption:
       "Logos, visual language, and brand voice that make your brand stand out and stay memorable across every touchpoint.",
-    image: "/works/bloom-india.jpg",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
     imageAlt: "Brand identity project preview",
     tags: ["Visual Identity", "Brand Voice", "Guidelines"],
   },
@@ -233,7 +235,8 @@ export const services = [
     title: "UGC Ecosystems",
     caption:
       "Authentic user-generated content systems that build trust, social proof, and lift conversions across funnels.",
-    image: "/works/bloom-india.jpg",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
     imageAlt: "UGC content project preview",
     tags: ["Creator UGC", "Social Proof", "Conversion"],
   },
@@ -260,7 +263,8 @@ export const services = [
     title: "Performance Strategy",
     caption:
       "Data-led creative planning that links your content to measurable business ROI and category growth.",
-    image: "/works/bloom-india.jpg",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
     imageAlt: "Performance strategy project preview",
     tags: ["Analytics", "Creative Testing", "ROI"],
   },

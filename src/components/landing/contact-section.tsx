@@ -1,202 +1,214 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import Image from "next/image";
 import { Reveal } from "@/components/motion/reveal";
 import { colorClasses as c } from "@/lib/colors";
-import { brand, contactContent } from "@/lib/site-content";
+import { brand } from "@/lib/site-content";
 
-function ContactChannel({
-  label,
-  value,
-  href,
-  external,
-}: {
-  label: string;
-  value: string;
-  href: string;
-  external?: boolean;
-}) {
+function FlowerCross() {
   return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-      className="group flex items-baseline justify-between gap-6 border-b border-white/15 py-4 transition-colors hover:border-brand-primary"
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      className="shrink-0 text-white/75"
+      aria-hidden
     >
-      <span className="text-xs uppercase tracking-[0.2em] text-white/45">{label}</span>
-      <span className="text-right text-sm font-medium text-white transition-colors group-hover:text-brand-primary sm:text-base">
-        {value}
-        <span aria-hidden className="ml-2 inline-block transition-transform group-hover:translate-x-1">
-          →
-        </span>
-      </span>
-    </a>
+      <path d="M8 5.6 11.2 2.4a1.6 1.6 0 1 1 2.26 2.26L10.4 7.9l3.06 3.06a1.6 1.6 0 1 1-2.26 2.26L8 10.16l-3.2 3.06a1.6 1.6 0 1 1-2.26-2.26L5.6 7.9 2.54 4.66a1.6 1.6 0 1 1 2.26-2.26L8 5.6z" />
+    </svg>
   );
 }
 
 export function ContactSection() {
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 600);
+  };
+
   return (
-    <section id="contact" className={`relative overflow-hidden px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-28 ${c.bg.page}`}>
-      <div className="mx-auto max-w-6xl">
-        <Reveal
-          variant="scaleIn"
-          className="relative overflow-hidden rounded-[2rem] bg-[#121212] px-6 py-10 text-white shadow-[0_40px_100px_rgba(0,0,0,0.28)] sm:rounded-[2.5rem] sm:px-10 sm:py-14 lg:px-14 lg:py-16"
-        >
-          {/* Atmosphere */}
-          <motion.div
+    <section
+      id="contact"
+      className={`relative overflow-hidden px-2 sm:px-3 md:px-4 lg:px-6 pb-12 pt-10 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16 ${c.bg.page}`}
+    >
+      <div className="relative mx-auto w-full max-w-[1920px]">
+        {/* Giant watermark title overlapping the card - half hidden under card */}
+        <div className="relative -mb-10 sm:-mb-20 lg:-mb-14 flex justify-center select-none pointer-events-none z-0">
+          <span
             aria-hidden
-            className="pointer-events-none absolute -left-24 -top-24 size-[28rem] rounded-full bg-brand-primary/35 blur-[110px]"
-            animate={{ opacity: [0.35, 0.55, 0.35], scale: [1, 1.08, 1] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-32 right-0 size-[22rem] rounded-full bg-[#ff8a3d]/20 blur-[100px]"
-            animate={{ opacity: [0.2, 0.4, 0.2], x: [0, -20, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            className="font-display text-[clamp(4.5rem,13vw,11.5rem)] font-normal leading-none tracking-normal text-transparent bg-clip-text select-none text-center whitespace-nowrap"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255,255,255,0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.55) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-              maskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
+                "linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.08) 58%, rgba(0, 0, 0, 0.01) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
             }}
+          >
+            Let&apos;s Connect
+          </span>
+        </div>
+
+        {/* Full-Width Dark Card */}
+        <Reveal
+          variant="fadeUp"
+          className="relative isolate z-10 w-full overflow-hidden rounded-[28px] sm:rounded-[36px] lg:rounded-[48px] bg-[#0c0c0c] text-white shadow-[0_32px_80px_rgba(0,0,0,0.32)]"
+        >
+          {/* Blurred project mockups collage background - clearly visible with blur */}
+          <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none select-none">
+            <Image
+              src="/showcase/showcase.png"
+              alt="Project mockups background"
+              fill
+              sizes="100vw"
+              className="object-cover object-center scale-105 blur-[6px] opacity-75 brightness-95 contrast-110"
+              priority
+            />
+          </div>
+
+          {/* Vignette & dark gradient overlay - calibrated so the background photo is visible while keeping text crisp */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,0.48)_0%,rgba(5,5,5,0.76)_100%)]"
           />
 
-          <div className="relative z-10 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 xl:gap-20">
-            <div>
-              <Reveal variant="fadeUp">
-                <div className="mb-8 flex items-center gap-3">
-                  <span className="relative flex size-2.5">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-[#22c55e] opacity-60" />
-                    <span className="relative size-2.5 rounded-full bg-[#22c55e]" />
-                  </span>
-                  <p className="text-xs uppercase tracking-[0.22em] text-white/55">
-                    {contactContent.sectionTag.replace(/[()]/g, "")} · open for new projects
-                  </p>
-                </div>
+          {/* Form & Heading Content */}
+          <div className="relative z-10 mx-auto w-full max-w-[1440px] grid gap-10 px-6 pt-12 pb-14 sm:px-12 sm:pt-16 sm:pb-18 lg:grid-cols-2 lg:gap-16 lg:px-16 lg:pt-22 lg:pb-22 xl:px-20">
+            {/* Left Column: Heading */}
+            <div className="flex flex-col justify-start">
+              <Reveal variant="fadeUp" delay={0.06}>
+                <h2 className="font-display text-[clamp(2.5rem,5.5vw,4.5rem)] font-normal leading-[1.08] tracking-tight text-white">
+                  Got a project in
+                  <br />
+                  mind?
+                </h2>
               </Reveal>
 
-              <Reveal as="h2" variant="fadeUp" delay={0.08} className="font-display text-[clamp(2.5rem,5.5vw,72px)] lg:text-[72px] lg:leading-[80px] font-normal leading-[1.11] tracking-normal [word-spacing:0.12em]">
-                Ready to
-                <br />
-                Scale Your
-                <br />
-                <span className="text-brand-primary">Brand?</span>
-              </Reveal>
-
-              <Reveal variant="fadeUp" delay={0.14}>
-                <p className="mt-6 max-w-md text-sm leading-relaxed text-white/65 sm:text-base">
-                  {contactContent.description}
+              <Reveal variant="fadeUp" delay={0.12}>
+                <p className="mt-4 sm:mt-6 text-sm sm:text-base font-normal text-white/60 font-sans leading-relaxed">
+                  Let&apos;s make something happen together
                 </p>
-              </Reveal>
-
-              <Reveal variant="fadeUp" delay={0.18}>
-                <a
-                  href={brand.phoneHref}
-                  className="mt-10 block font-display text-[clamp(1.75rem,4.5vw,3.25rem)] font-bold leading-none tracking-[-0.03em] text-white transition-colors hover:text-brand-primary"
-                >
-                  {brand.phone}
-                </a>
-              </Reveal>
-
-              <Reveal variant="fadeUp" delay={0.22} className="mt-8 max-w-md">
-                <ContactChannel label="Email" value={brand.email} href={brand.emailHref} />
-                <ContactChannel label="WhatsApp" value="Chat with us" href={brand.whatsappHref} external />
-                <ContactChannel label="Call" value="Click to call" href={brand.phoneHref} />
               </Reveal>
             </div>
 
+            {/* Right Column: Contact Form */}
             <Reveal variant="fadeUp" delay={0.1}>
-              <form
-                className="relative flex flex-col justify-between rounded-[1.5rem] bg-white p-6 text-[#111] shadow-[0_24px_60px_rgba(0,0,0,0.35)] sm:rounded-[1.75rem] sm:p-8 lg:min-h-[540px]"
-                onSubmit={(event) => event.preventDefault()}
-              >
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#7a7a7a]">Project brief</p>
-                  <p className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                    Tell us what you&apos;re building
-                  </p>
-
-                  <div className="mt-8 space-y-6">
-                    <label className="block">
-                      <span className="mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-[#7a7a7a]">
-                        {contactContent.formNameLabel}
-                      </span>
-                      <input
-                        type="text"
-                        placeholder="Your name"
-                        className="w-full border-b border-[#dddddd] bg-transparent py-3 text-base outline-none transition-[border-color] placeholder:text-[#b0b0b0] focus:border-brand-primary"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-[#7a7a7a]">
-                        {contactContent.formEmailLabel}
-                      </span>
-                      <input
-                        type="email"
-                        placeholder="you@brand.com"
-                        className="w-full border-b border-[#dddddd] bg-transparent py-3 text-base outline-none transition-[border-color] placeholder:text-[#b0b0b0] focus:border-brand-primary"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-[#7a7a7a]">
-                        {contactContent.formMessageLabel}
-                      </span>
-                      <textarea
-                        rows={4}
-                        placeholder={contactContent.formMessagePlaceholder}
-                        className="w-full resize-none border-b border-[#dddddd] bg-transparent py-3 text-base outline-none transition-[border-color] placeholder:text-[#b0b0b0] focus:border-brand-primary"
-                      />
-                    </label>
+              {submitted ? (
+                <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl bg-white/5 p-8 text-center backdrop-blur-sm">
+                  <div className="flex size-14 items-center justify-center rounded-full bg-white text-[#111] mb-4">
+                    <svg className="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
-                </div>
-
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs leading-relaxed text-[#7a7a7a]">
-                    We usually reply within one business day.
+                  <h3 className="font-display text-2xl font-normal text-white">Message Sent!</h3>
+                  <p className="mt-2 text-sm text-white/70 max-w-sm">
+                    Thank you for reaching out. We&apos;ll review your project details and get back to you within 24 hours.
                   </p>
                   <button
-                    type="submit"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-brand-primary px-7 text-sm font-semibold text-white transition-[transform,box-shadow] hover:shadow-[0_12px_28px_rgba(255,92,0,0.35)] active:scale-[0.98]"
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="mt-6 rounded-full bg-white/10 px-6 py-2.5 text-xs uppercase tracking-wider text-white hover:bg-white/20 transition-colors"
                   >
-                    {contactContent.buttonLabel}
-                    <span aria-hidden>→</span>
+                    Send another message
                   </button>
                 </div>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-7">
+                  {/* Your Name */}
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="contact-name"
+                      className="block text-sm sm:text-[0.9375rem] font-medium text-white/90"
+                    >
+                      Your Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      required
+                      placeholder="Enter your Name"
+                      className="w-full bg-transparent border-b border-white/25 pb-3 pt-1 text-sm sm:text-base text-white placeholder:text-white/40 focus:border-white focus:outline-none transition-colors"
+                    />
+                  </div>
+
+                  {/* Your Email */}
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="contact-email"
+                      className="block text-sm sm:text-[0.9375rem] font-medium text-white/90"
+                    >
+                      Your Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="Enter the Email"
+                      className="w-full bg-transparent border-b border-white/25 pb-3 pt-1 text-sm sm:text-base text-white placeholder:text-white/40 focus:border-white focus:outline-none transition-colors"
+                    />
+                  </div>
+
+                  {/* Project Description */}
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="contact-description"
+                      className="block text-sm sm:text-[0.9375rem] font-medium text-white/90"
+                    >
+                      Project Description
+                    </label>
+                    <textarea
+                      id="contact-description"
+                      name="description"
+                      rows={2}
+                      required
+                      placeholder="Type Here..."
+                      className="w-full resize-none bg-transparent border-b border-white/25 pb-3 pt-1 text-sm sm:text-base text-white placeholder:text-white/40 focus:border-white focus:outline-none transition-colors"
+                    />
+                  </div>
+
+                  {/* Send Now! Button */}
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full rounded-full bg-[#e5e5e5] py-3.5 sm:py-4 px-8 text-center text-sm sm:text-base font-semibold text-[#111111] shadow-[0_4px_20px_rgba(0,0,0,0.25)] transition-all duration-200 hover:bg-white hover:shadow-[0_6px_26px_rgba(255,255,255,0.18)] active:scale-[0.99] cursor-pointer disabled:opacity-70"
+                    >
+                      {loading ? "Sending..." : "Send Now!"}
+                    </button>
+                  </div>
+                </form>
+              )}
             </Reveal>
           </div>
-        </Reveal>
 
-        <Reveal
-          variant="fadeUp"
-          delay={0.05}
-          className="mt-5 overflow-hidden rounded-full bg-brand-primary py-3.5 text-white sm:mt-6 sm:py-4"
-        >
-          <div className="marquee-track flex w-max items-center gap-10 whitespace-nowrap will-change-transform px-4 text-sm font-semibold tracking-wide sm:gap-14 sm:text-base">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <span key={index} className="inline-flex items-center gap-10 sm:gap-14">
-                <span>{brand.email}</span>
-                <span aria-hidden className="opacity-70">
-                  ✦
-                </span>
-                <span>{brand.phone}</span>
-                <span aria-hidden className="opacity-70">
-                  ✦
-                </span>
-                <Link href={brand.whatsappHref} target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
-                  WhatsApp
-                </Link>
-                <span aria-hidden className="opacity-70">
-                  ✦
-                </span>
-              </span>
-            ))}
+          {/* Bottom Email Marquee Ticker */}
+          <div className="relative w-full overflow-hidden border-t border-white/10 pt-6 pb-7 sm:pt-8 sm:pb-9 bg-black/40 backdrop-blur-[2px]">
+            {/* Fade edges */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#0c0c0c] to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#0c0c0c] to-transparent z-10" />
+
+            <div className="marquee-track flex w-max items-center gap-8 sm:gap-12 whitespace-nowrap will-change-transform px-4">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="inline-flex items-center gap-8 sm:gap-12">
+                  <a
+                    href={brand.emailHref}
+                    className="font-display text-lg sm:text-2xl md:text-3xl font-normal text-white tracking-normal transition-opacity hover:opacity-80"
+                  >
+                    {brand.email}
+                  </a>
+                  <FlowerCross />
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>

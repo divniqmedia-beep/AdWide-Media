@@ -10,7 +10,7 @@ const mobileLinks = [
   { label: "Works", href: "/#works" },
   { label: "Services", href: "/#services" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "/about" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export function SiteHeader() {

@@ -1,170 +1,290 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
-import { Reveal, RevealItem, Stagger } from "@/components/motion/reveal";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { colorClasses as c } from "@/lib/colors";
 import { services } from "@/lib/site-content";
 
-type Service = (typeof services)[number];
-
-function ServiceMarquee({ label }: { label: string }) {
-  const loop = Array.from({ length: 8 }, () => label);
-
-  return (
-    <div className="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2 overflow-hidden">
-      <div className="marquee-fade-edges">
-        <div className="marquee-track flex w-max items-center gap-6 whitespace-nowrap will-change-transform sm:gap-8">
-          {loop.map((word, index) => (
-            <span key={`${word}-${index}`} className="flex items-center gap-6 sm:gap-8">
-              <span className="font-display text-[clamp(3.5rem,8vw,7rem)] font-bold leading-none tracking-[-0.04em] text-brand-primary/45">
-                {word}
-              </span>
-              <span
-                aria-hidden
-                className="font-display text-[clamp(2rem,4vw,3.5rem)] font-bold leading-none text-brand-primary/40"
-              >
-                ×
-              </span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ServicePreviewCard({ service }: { service: Service }) {
-  return (
-    <motion.div
-      key={service.id}
-      initial={{ opacity: 0, y: 20, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -14, scale: 0.985 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="relative w-full"
-    >
-      <Link
-        href={`/services/${service.id}`}
-        className="group block overflow-hidden rounded-[1.5rem] bg-[#141414] shadow-[0_36px_90px_rgba(0,0,0,0.22)] ring-1 ring-black/15 transition-transform duration-300 hover:scale-[1.01] sm:rounded-[2rem]"
-      >
-        <div className="relative aspect-[16/11] w-full lg:aspect-[16/12]">
-          <Image
-            src={service.image}
-            alt={service.imageAlt}
-            fill
-            className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 1024px) 92vw, 720px"
-            priority={service.id === "brand-identity"}
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/45 via-transparent to-black/10" />
-        </div>
-      </Link>
-    </motion.div>
-  );
+function ServiceIcon({ id, className = "size-5" }: { id: string; className?: string }) {
+  switch (id) {
+    case "brand-identity":
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z" />
+          <path d="M7 7h.01" />
+        </svg>
+      );
+    case "content-production":
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <path d="m22 8-6 4 6 4V8Z" />
+          <rect width="14" height="12" x="2" y="6" rx="2" />
+        </svg>
+      );
+    case "short-form":
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
+      );
+    case "ugc":
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      );
+    case "influencer":
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <path d="m3 11 18-5v12L3 13v-2z" />
+          <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+        </svg>
+      );
+    case "social":
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+          <polyline points="2 17 12 22 22 17" />
+          <polyline points="2 12 12 17 22 12" />
+        </svg>
+      );
+    case "performance-strategy":
+    default:
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          <line x1="12" x2="12" y1="20" y2="10" />
+          <line x1="18" x2="18" y1="20" y2="4" />
+          <line x1="6" x2="6" y1="20" y2="14" />
+        </svg>
+      );
+  }
 }
 
 export function ServicesSection() {
-  const [activeId, setActiveId] = useState<string>(services[0].id);
-  const active = services.find((service) => service.id === activeId) ?? services[0];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Scroll-linked progress tracking for changing cards on scroll
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const total = services.length;
+    const clamped = Math.max(0, Math.min(0.999, latest));
+    const nextIndex = Math.min(total - 1, Math.floor(clamped * total));
+    if (nextIndex !== activeIndex) {
+      setActiveIndex(nextIndex);
+    }
+  });
+
+  const active = services[activeIndex] ?? services[0];
+
+  const handleSelect = (idx: number) => {
+    setActiveIndex(idx);
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const containerTop = rect.top + scrollTop;
+    const totalScroll = containerRef.current.offsetHeight - window.innerHeight;
+    const targetScroll = containerTop + ((idx + 0.25) / services.length) * totalScroll;
+    window.scrollTo({ top: targetScroll, behavior: "smooth" });
+  };
 
   return (
-    <section
-      id="services"
-      className={`relative overflow-hidden px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-28 ${c.bg.page}`}
-    >
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading title="What we" accent="do" />
-
-        <div className={`mt-10 border-t pt-10 sm:mt-12 sm:pt-12 ${c.border.default}`}>
-          <div className="grid gap-10 lg:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.4fr)] lg:items-start lg:gap-14 xl:gap-20">
-            <div
-              role="tablist"
-              aria-label="Services"
-              aria-orientation="vertical"
-            >
-              <Stagger
-                stagger={0.06}
-                className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:gap-1 lg:overflow-visible lg:pb-0"
-              >
-                {services.map((service) => {
-                  const isActive = service.id === activeId;
-
-                  return (
-                    <RevealItem key={service.id}>
-                      <button
-                        type="button"
-                        role="tab"
-                        aria-selected={isActive}
-                        onClick={() => setActiveId(service.id)}
-                        className={`flex shrink-0 items-center gap-3 rounded-full px-4 py-3 text-left text-base font-medium transition-colors sm:text-lg lg:rounded-none lg:px-0 lg:py-3.5 lg:text-[1.35rem] ${
-                          isActive
-                            ? c.text.brand
-                            : `${c.text.muted} hover:text-text-secondary`
-                        }`}
-                      >
-                        <span
-                          aria-hidden
-                          className={`size-2 shrink-0 rounded-full bg-brand-primary transition-opacity ${
-                            isActive ? "opacity-100" : "opacity-0"
-                          }`}
-                        />
-                        {service.title}
-                      </button>
-                    </RevealItem>
-                  );
-                })}
-              </Stagger>
+    <section id="services" className={`relative ${c.bg.page}`}>
+      {/* Scroll-driven height: 55vh per service allows a smooth, controlled scroll experience */}
+      <div
+        ref={containerRef}
+        className="relative w-full"
+        style={{ height: `${Math.max(300, services.length * 60)}vh` }}
+      >
+        {/* Sticky viewport stage */}
+        <div className="sticky top-0 flex min-h-screen w-full flex-col justify-center px-4 py-12 sm:px-6 lg:px-10">
+          <div className="mx-auto w-full max-w-6xl">
+            {/* Header: What we do */}
+            <div className="mb-10 sm:mb-14 text-center">
+              <h2 className="font-display text-[clamp(2.5rem,5.5vw,72px)] font-normal leading-[1.1] tracking-normal text-[#111111]">
+                What we <span className="text-brand-primary">do</span>
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-text-muted font-sans leading-relaxed">
+                End-to-end brand and growth solutions that make your brand stand out.
+              </p>
             </div>
 
-            <Reveal variant="fadeRight" className="relative min-h-[min(48vh,460px)]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`${active.id}-marquee`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ServiceMarquee label={active.title} />
-                </motion.div>
-              </AnimatePresence>
+            {/* Main Interactive Stage: Left Stepper Navigation + Right Showcase Card */}
+            <div className="grid gap-8 lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:gap-14 xl:gap-20 items-center">
+              {/* Left Column: Vertical Timeline Track & Nav Items */}
+              <div className="relative">
+                {/* Continuous Vertical Timeline Track */}
+                <div
+                  aria-hidden
+                  className="absolute left-[7px] sm:left-[9px] top-6 bottom-6 w-[2px] bg-[#e6e6e6]"
+                />
 
-              <div className="relative z-10">
-                <AnimatePresence mode="wait">
-                  <ServicePreviewCard service={active} />
-                </AnimatePresence>
+                <div className="flex flex-col space-y-2">
+                  {services.map((service, index) => {
+                    const isActive = index === activeIndex;
+
+                    return (
+                      <div key={service.id} className="relative flex items-center pl-7 sm:pl-8">
+                        {/* Timeline Dot */}
+                        <div
+                          aria-hidden
+                          className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none"
+                        >
+                          {isActive ? (
+                            <motion.span
+                              layoutId="activeDot"
+                              className="size-3.5 sm:size-4 rounded-full bg-brand-primary ring-4 ring-brand-primary/20 shadow-sm"
+                              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                            />
+                          ) : (
+                            <span className="size-2 sm:size-2.5 rounded-full bg-[#c8c8c8] border border-white" />
+                          )}
+                        </div>
+
+                        {/* Service Item Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleSelect(index)}
+                          className={`w-full flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl transition-all duration-200 text-left cursor-pointer ${
+                            isActive
+                              ? "bg-[#FFF0E6] text-brand-primary shadow-xs font-semibold"
+                              : "bg-transparent text-[#262626] hover:bg-black/[0.03] font-medium"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3.5 min-w-0">
+                            <ServiceIcon
+                              id={service.id}
+                              className={`size-5 shrink-0 transition-colors ${
+                                isActive ? "text-brand-primary" : "text-[#404040]"
+                              }`}
+                            />
+                            <span className="truncate text-sm sm:text-base">
+                              {service.title}
+                            </span>
+                          </div>
+
+                          {isActive && (
+                            <span
+                              aria-hidden
+                              className="text-brand-primary text-base leading-none font-bold ml-2 shrink-0"
+                            >
+                              →
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div className="relative z-10 mt-6 max-w-xl lg:mt-8">
+              {/* Right Column: Active Service Showcase Card */}
+              <div className="w-full">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active.id}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.28 }}
-                    className="space-y-3"
+                    exit={{ opacity: 0, y: -14 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col"
                   >
-                    <p className={`text-sm leading-relaxed sm:text-base ${c.text.secondary}`}>
+                    {/* Image Card */}
+                    <div className="relative aspect-[16/10] sm:aspect-[16/9.5] w-full overflow-hidden rounded-[24px] sm:rounded-[32px] bg-[#141414] shadow-[0_16px_44px_rgba(0,0,0,0.12)] ring-1 ring-black/5">
+                      <Image
+                        src={active.image}
+                        alt={active.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 760px"
+                        priority
+                        className="object-cover object-center"
+                      />
+                    </div>
+
+                    {/* Description */}
+                    <p className="mt-5 sm:mt-6 text-sm sm:text-base text-[#4a4a4a] leading-relaxed font-sans max-w-xl">
                       {active.caption}
                     </p>
-                    <div>
+
+                    {/* CTA Link to detail page */}
+                    <div className="mt-4 sm:mt-5">
                       <Link
                         href={`/services/${active.id}`}
-                        className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-brand-primary transition-all hover:gap-3"
+                        className="inline-flex items-center gap-2 text-xs sm:text-[13px] font-bold uppercase tracking-wider text-brand-primary transition-all hover:gap-3"
                       >
-                        <span>View {active.title} Details</span>
+                        <span>VIEW {active.title} DETAILS</span>
                         <span aria-hidden>→</span>
                       </Link>
                     </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
-            </Reveal>
+            </div>
           </div>
         </div>
       </div>

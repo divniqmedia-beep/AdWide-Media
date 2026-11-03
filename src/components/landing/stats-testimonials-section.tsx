@@ -1,12 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, animate, motion, useInView } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
 import { colorClasses as c } from "@/lib/colors";
 import { stats, testimonials } from "@/lib/site-content";
 import { testimonialsMedia } from "@/lib/testimonials-media";
+
+/** Animated incremental counter that starts when scrolled into view and stops at the final value */
+function AnimatedStat({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const [displayNumber, setDisplayNumber] = useState(0);
+  const hasAnimated = useRef(false);
+
+  // Parse string once into primitives to prevent re-render loops
+  const match = useRef(value.match(/^([^0-9]*)(\d+)(.*)$/)).current;
+  const prefix = match ? match[1] : "";
+  const target = match ? parseInt(match[2], 10) : 0;
+  const suffix = match ? match[3] : "";
+
+  useEffect(() => {
+    if (!isInView || hasAnimated.current || !match) return;
+    hasAnimated.current = true;
+
+    const controls = animate(0, target, {
+      duration: 2,
+      ease: [0.16, 1, 0.3, 1], // smooth ease-out expo
+      onUpdate(latest) {
+        setDisplayNumber(Math.round(latest));
+      },
+      onComplete() {
+        setDisplayNumber(target);
+      },
+    });
+
+    return () => controls.stop();
+  }, [isInView, target]);
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      {prefix}
+      {hasAnimated.current ? displayNumber : 0}
+      {suffix}
+    </span>
+  );
+}
 
 export function StatsTestimonialsSection() {
   const [index, setIndex] = useState(0);
@@ -27,6 +67,7 @@ export function StatsTestimonialsSection() {
             aria-hidden
             className="font-display text-[clamp(4.5rem,13vw,11.5rem)] font-normal leading-none tracking-normal text-transparent bg-clip-text select-none"
             style={{
+              fontFamily: 'var(--font-cal-sans), "Cal Sans", sans-serif',
               backgroundImage:
                 "linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.08) 58%, rgba(0, 0, 0, 0.01) 100%)",
               WebkitBackgroundClip: "text",
@@ -57,9 +98,13 @@ export function StatsTestimonialsSection() {
             <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-9 lg:p-10">
               {stats.map((stat, i) => (
                 <Reveal key={stat.label} variant="fadeUp" delay={0.08 + i * 0.08}>
-                  <p className="font-display text-[clamp(2.75rem,5.5vw,4.25rem)] font-normal leading-none tracking-normal text-white">
-                    {stat.value}
-                  </p>
+                  {/* Cal Sans font + Animated incremental counter */}
+                  <div
+                    className="font-display text-[clamp(2.75rem,5.5vw,4.25rem)] font-normal leading-none tracking-normal text-white"
+                    style={{ fontFamily: 'var(--font-cal-sans), "Cal Sans", sans-serif' }}
+                  >
+                    <AnimatedStat value={stat.value} />
+                  </div>
                   <p className="mt-2 text-xs sm:text-[0.8125rem] font-medium text-white/70 leading-snug">
                     {stat.label}
                   </p>
@@ -100,12 +145,15 @@ export function StatsTestimonialsSection() {
 
             <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-9 lg:p-10 text-white">
               {/* Counter */}
-              <div className="flex items-center text-sm font-medium tabular-nums">
+              <div
+                className="flex items-center text-sm font-medium tabular-nums"
+                style={{ fontFamily: 'var(--font-cal-sans), "Cal Sans", sans-serif' }}
+              >
                 <span className="text-white">{String(index + 1).padStart(2, "0")}</span>
                 <span className="text-white/60"> / {String(testimonials.length).padStart(2, "0")}</span>
               </div>
 
-              {/* Bottom Quote + Author + Navigation */}
+              {/* Bottom Quote (Card Title in Cal Sans) + Author + Navigation */}
               <div className="space-y-6 sm:space-y-7">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -116,15 +164,21 @@ export function StatsTestimonialsSection() {
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="max-w-2xl"
                   >
-                    <p className="font-display text-xl sm:text-2xl lg:text-[28px] lg:leading-[36px] font-normal leading-snug tracking-normal text-white">
+                    <blockquote
+                      className="font-display text-xl sm:text-2xl lg:text-[28px] lg:leading-[36px] font-normal leading-snug tracking-normal text-white"
+                      style={{ fontFamily: 'var(--font-cal-sans), "Cal Sans", sans-serif' }}
+                    >
                       &ldquo;{active.quote.replace(/^["“”]|["“”]$/g, "")}&rdquo;
-                    </p>
+                    </blockquote>
                   </motion.div>
                 </AnimatePresence>
 
                 <div className="flex items-end justify-between gap-4">
                   <div>
-                    <p className="font-sans text-sm sm:text-base font-semibold text-white">
+                    <p
+                      className="font-display text-sm sm:text-base font-normal text-white"
+                      style={{ fontFamily: 'var(--font-cal-sans), "Cal Sans", sans-serif' }}
+                    >
                       {active.name}
                     </p>
                     <p className="font-sans mt-0.5 text-xs sm:text-sm text-white/65">
@@ -137,7 +191,7 @@ export function StatsTestimonialsSection() {
                       type="button"
                       onClick={prev}
                       aria-label="Previous testimonial"
-                      className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white backdrop-blur-md transition-all active:scale-95"
+                      className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white backdrop-blur-md transition-all active:scale-95 cursor-pointer"
                     >
                       <svg
                         className="size-4.5 sm:size-5"
@@ -155,7 +209,7 @@ export function StatsTestimonialsSection() {
                       type="button"
                       onClick={next}
                       aria-label="Next testimonial"
-                      className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white backdrop-blur-md transition-all active:scale-95"
+                      className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white backdrop-blur-md transition-all active:scale-95 cursor-pointer"
                     >
                       <svg
                         className="size-4.5 sm:size-5"

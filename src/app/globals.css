@@ -78,6 +78,10 @@ p {
   font-family: var(--font-sans), Inter, system-ui, sans-serif;
 }
 
+.font-display {
+  font-family: var(--font-cal-sans), "Cal Sans", sans-serif;
+}
+
 @keyframes marquee-left {
   from {
     transform: translateX(0);
