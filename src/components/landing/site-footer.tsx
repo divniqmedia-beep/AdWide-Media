@@ -69,16 +69,18 @@ function IndiaClock() {
 function FooterColumn({
   title,
   children,
+  className = "space-y-3.5",
 }: {
   title: string;
   children: ReactNode;
+  className?: string;
 }) {
   return (
     <div>
       <p className="mb-5 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-white/40">
         {title}
       </p>
-      <ul className="space-y-3.5">{children}</ul>
+      <ul className={className}>{children}</ul>
     </div>
   );
 }
@@ -143,17 +145,14 @@ export function SiteFooter() {
       />
 
       <div className="relative z-10 w-full px-6 pt-16 sm:px-10 sm:pt-20 lg:px-16 lg:pt-24 xl:px-24">
-        <Stagger className="grid gap-12 sm:grid-cols-3 sm:gap-10 lg:gap-16" stagger={0.12}>
+        <Stagger className="grid gap-12 sm:grid-cols-3 lg:grid-cols-[1.25fr_1fr_1fr] sm:gap-10 lg:gap-16" stagger={0.12}>
           <RevealItem>
-            <FooterColumn title="Navigation">
+            <FooterColumn title="Navigation" className="grid grid-cols-2 gap-x-6 sm:gap-x-8 md:gap-x-10 gap-y-3.5">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <FooterLink href={link.href}>{link.label}</FooterLink>
                 </li>
               ))}
-              <li>
-                <FooterLink href="#works">Works</FooterLink>
-              </li>
             </FooterColumn>
           </RevealItem>
 
