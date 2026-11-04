@@ -32,9 +32,6 @@ export function WorkGrid() {
                 />
               </div>
               <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-                <p className={`text-sm tabular-nums ${c.text.muted}`}>
-                  {String(index + 1).padStart(2, "0")} / {String(works.length).padStart(2, "0")}
-                </p>
                 <h2 className={`mt-3 font-display text-3xl font-normal tracking-normal [word-spacing:0.12em] sm:text-4xl ${c.text.primary}`}>
                   {work.title}
                 </h2>

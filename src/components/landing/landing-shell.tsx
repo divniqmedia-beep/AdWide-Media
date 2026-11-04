@@ -1,9 +1,9 @@
+import { BackToTopButton } from "@/components/ui/back-to-top-button";
 import { colorClasses as c } from "@/lib/colors";
 import { DualTickerSection } from "./dual-ticker-section";
 import { ShowcaseSection } from "./showcase-section";
 import { ContactSection } from "./contact-section";
 import { FaqSection } from "./faq-section";
-import { FoundersSection } from "./founders-section";
 import { HeroSection } from "./hero-section";
 import { ServicesSection } from "./services-section";
 import { SiteFooter } from "./site-footer";
@@ -24,11 +24,11 @@ export function LandingShell() {
         <StatsTestimonialsSection />
         <WorksSection />
         <ServicesSection />
-        {/* <FoundersSection />  */}
         <FaqSection />
         <ContactSection />
       </main>
       <SiteFooter />
+      <BackToTopButton />
     </div>
   );
 }

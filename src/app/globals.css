@@ -104,6 +104,19 @@ p {
   animation: marquee-left 38s linear infinite;
 }
 
+.marquee-track.is-paused,
+.marquee-track-reverse.is-paused,
+.marquee-track-rtl.is-paused,
+.marquee-track-rtl-slow.is-paused,
+.marquee-track-reverse-slow.is-paused,
+.marquee-pause-on-hover:hover .marquee-track,
+.marquee-pause-on-hover:hover .marquee-track-reverse,
+.marquee-pause-on-hover:hover .marquee-track-rtl,
+.marquee-pause-on-hover:hover .marquee-track-rtl-slow,
+.marquee-pause-on-hover:hover .marquee-track-reverse-slow {
+  animation-play-state: paused !important;
+}
+
 .marquee-track-reverse {
   animation: marquee-right 42s linear infinite;
 }

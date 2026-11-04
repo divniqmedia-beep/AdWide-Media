@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { colorClasses as c } from "@/lib/colors";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
+import { BackToTopButton } from "@/components/ui/back-to-top-button";
+import { colorClasses as c } from "@/lib/colors";
 
 export function PageShell({ children }: { children: ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export function PageShell({ children }: { children: ReactNode }) {
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      <BackToTopButton />
     </div>
   );
 }

@@ -1,52 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, animate, motion, useInView } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
+import { AnimatedStat } from "@/components/ui/animated-stat";
 import { colorClasses as c } from "@/lib/colors";
 import { stats, testimonials } from "@/lib/site-content";
 import { testimonialsMedia } from "@/lib/testimonials-media";
-
-/** Animated incremental counter that starts when scrolled into view and stops at the final value */
-function AnimatedStat({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-  const [displayNumber, setDisplayNumber] = useState(0);
-  const hasAnimated = useRef(false);
-
-  // Parse string once into primitives to prevent re-render loops
-  const match = useRef(value.match(/^([^0-9]*)(\d+)(.*)$/)).current;
-  const prefix = match ? match[1] : "";
-  const target = match ? parseInt(match[2], 10) : 0;
-  const suffix = match ? match[3] : "";
-
-  useEffect(() => {
-    if (!isInView || hasAnimated.current || !match) return;
-    hasAnimated.current = true;
-
-    const controls = animate(0, target, {
-      duration: 2,
-      ease: [0.16, 1, 0.3, 1], // smooth ease-out expo
-      onUpdate(latest) {
-        setDisplayNumber(Math.round(latest));
-      },
-      onComplete() {
-        setDisplayNumber(target);
-      },
-    });
-
-    return () => controls.stop();
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {prefix}
-      {hasAnimated.current ? displayNumber : 0}
-      {suffix}
-    </span>
-  );
-}
 
 export function StatsTestimonialsSection() {
   const [index, setIndex] = useState(0);
@@ -149,8 +110,6 @@ export function StatsTestimonialsSection() {
                 className="flex items-center text-sm font-medium tabular-nums"
                 style={{ fontFamily: 'var(--font-cal-sans), "Cal Sans", sans-serif' }}
               >
-                <span className="text-white">{String(index + 1).padStart(2, "0")}</span>
-                <span className="text-white/60"> / {String(testimonials.length).padStart(2, "0")}</span>
               </div>
 
               {/* Bottom Quote (Card Title in Cal Sans) + Author + Navigation */}

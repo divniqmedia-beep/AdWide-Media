@@ -180,9 +180,6 @@ export function SiteFooter() {
                   <FooterLink href={link.href}>{link.label}</FooterLink>
                 </li>
               ))}
-              <li>
-                <FooterLink href={brand.phoneHref}>{brand.phone}</FooterLink>
-              </li>
             </FooterColumn>
           </RevealItem>
         </Stagger>
@@ -196,13 +193,7 @@ export function SiteFooter() {
           <p className="sm:text-center">
             <IndiaClock />
           </p>
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="w-fit font-medium text-brand-primary transition-opacity hover:opacity-80 sm:text-right"
-          >
-            Back to top
-          </button>
+          <span className="hidden sm:block sm:w-24" aria-hidden />
         </Reveal>
       </div>
 

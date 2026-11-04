@@ -215,9 +215,6 @@ function WorkStackCard({
         {/* Left Column: Intro & Description */}
         <div className="flex flex-col justify-between gap-3 sm:gap-5 text-white lg:min-h-[min(48vh,380px)] lg:py-2">
           <div className="space-y-1.5 sm:space-y-2.5">
-            <p className="text-xs sm:text-sm tabular-nums text-white/60">
-              {String(index + 1).padStart(2, "0")} / {String(WORK_COUNT).padStart(2, "0")}
-            </p>
             <p className="max-w-xs text-xs sm:text-sm leading-relaxed text-white/70">
               {worksIntro}
             </p>

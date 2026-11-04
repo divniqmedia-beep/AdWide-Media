@@ -33,8 +33,8 @@ export function AboutStorySection() {
 
       <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal variant="fadeLeft">
-          <p className={`text-base leading-relaxed ${c.text.secondary}`}>{aboutLong}</p>
-          <p className={`mt-5 text-base leading-relaxed ${c.text.secondary}`}>{usp}</p>
+          <p className={`text-base leading-relaxed text-justify ${c.text.secondary}`}>{aboutLong}</p>
+          <p className={`mt-5 text-base leading-relaxed text-justify ${c.text.secondary}`}>{usp}</p>
         </Reveal>
 
         <Reveal variant="fadeRight" className="relative mx-auto w-full max-w-md lg:max-w-none">
@@ -43,13 +43,13 @@ export function AboutStorySection() {
             className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] shadow-[0_28px_70px_rgba(0,0,0,0.18)] sm:rounded-[2rem]"
           >
             <motion.div style={{ scale: imageScale }} className="absolute inset-0">
-              <Image
-                src="/works/nova-retail.jpg"
-                alt="Adwide creative production in progress"
-                fill
-                className="object-cover object-center"
-                sizes="(max-width: 1024px) 90vw, 480px"
-              />
+                <Image
+                  src="/works/nova-retail.jpg"
+                  alt="Adwide creative production in progress"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 90vw, 480px"
+                />
             </motion.div>
             <div className="absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-black/10" />
           </motion.div>

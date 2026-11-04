@@ -33,6 +33,16 @@ function FlowerCross() {
   );
 }
 
+const marqueeItems = [
+  { label: brand.phone, href: brand.whatsappHref, external: true },
+  { label: brand.email, href: brand.emailHref, external: false },
+  { label: "WhatsApp", href: brand.whatsappHref, external: true },
+  { label: "Instagram", href: "https://www.instagram.com/mihir_g/", external: true },
+] as const;
+
+const marqueeLinkClass =
+  "font-display text-lg sm:text-2xl md:text-3xl font-normal text-white tracking-normal transition-opacity hover:opacity-80";
+
 const emptyValues: ContactFormValues = {
   name: "",
   contact: "",
@@ -53,6 +63,7 @@ export function ContactSection() {
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [marqueePaused, setMarqueePaused] = useState(false);
 
   const clearFieldError = (field: keyof ContactFormValues) => {
     if (!errors[field]) return;
@@ -309,22 +320,41 @@ export function ContactSection() {
             </Reveal>
           </div>
 
-          <div className="relative w-full overflow-hidden border-t border-white/10 pt-6 pb-7 sm:pt-8 sm:pb-9 bg-black/40 backdrop-blur-[2px]">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-[#0c0c0c] to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-[#0c0c0c] to-transparent z-10" />
+          <div
+            className="marquee-pause-on-hover relative z-20 w-full cursor-default overflow-hidden border-t border-white/10 bg-black/40 pt-6 pb-7 backdrop-blur-[2px] sm:pt-8 sm:pb-9"
+            onMouseEnter={() => setMarqueePaused(true)}
+            onMouseLeave={() => setMarqueePaused(false)}
+            onFocusCapture={() => setMarqueePaused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setMarqueePaused(false);
+              }
+            }}
+          >
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#0c0c0c] to-transparent sm:w-28" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#0c0c0c] to-transparent sm:w-28" />
 
-            <div className="marquee-track flex w-max items-center gap-8 sm:gap-12 whitespace-nowrap will-change-transform px-4">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="inline-flex items-center gap-8 sm:gap-12">
-                  <a
-                    href={brand.whatsappHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-display text-lg sm:text-2xl md:text-3xl font-normal text-white tracking-normal transition-opacity hover:opacity-80"
-                  >
-                    {brand.phone}
-                  </a>
-                  <FlowerCross />
+            <div
+              className={`marquee-track flex w-max items-center gap-8 whitespace-nowrap px-4 will-change-transform sm:gap-12 ${
+                marqueePaused ? "is-paused" : ""
+              }`}
+              style={marqueePaused ? { animationPlayState: "paused" } : undefined}
+            >
+              {Array.from({ length: 6 }).map((_, loop) => (
+                <div key={loop} className="inline-flex items-center gap-8 sm:gap-12">
+                  {marqueeItems.map((item) => (
+                    <span key={`${loop}-${item.label}`} className="inline-flex items-center gap-8 sm:gap-12">
+                      <a
+                        href={item.href}
+                        target={item.external ? "_blank" : undefined}
+                        rel={item.external ? "noreferrer" : undefined}
+                        className={marqueeLinkClass}
+                      >
+                        {item.label}
+                      </a>
+                      <FlowerCross />
+                    </span>
+                  ))}
                 </div>
               ))}
             </div>
