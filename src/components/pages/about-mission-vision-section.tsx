@@ -7,131 +7,144 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { Reveal, RevealItem, Stagger, revealEase } from "@/components/motion/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { colorClasses as c } from "@/lib/colors";
 import { mission, vision } from "@/lib/site-content";
 
-const MUTED_RGB = [184, 184, 184] as const;
-const ACTIVE_RGB = [17, 17, 17] as const;
-const BRAND_RGB = [255, 92, 0] as const;
+type Statement = {
+  index: string;
+  label: string;
+  body: string;
+  accent: boolean;
+};
 
-function lerpChannel(from: number, to: number, t: number) {
-  return Math.round(from + (to - from) * t);
-}
+const statements: Statement[] = [
+  {
+    index: "01",
+    label: "Mission",
+    body: mission,
+    accent: false,
+  },
+  {
+    index: "02",
+    label: "Vision",
+    body: vision,
+    accent: true,
+  },
+];
 
-function lerpRgb(
-  from: readonly [number, number, number],
-  to: readonly [number, number, number],
-  t: number,
-) {
-  const clamped = Math.min(Math.max(t, 0), 1);
-  return `rgb(${lerpChannel(from[0], to[0], clamped)}, ${lerpChannel(from[1], to[1], clamped)}, ${lerpChannel(from[2], to[2], clamped)})`;
-}
-
-function ScrollWord({
-  word,
-  index,
-  total,
-  progress,
-  range,
-  accent,
-}: {
-  word: string;
-  index: number;
-  total: number;
-  progress: MotionValue<number>;
-  range: [number, number];
-  accent?: boolean;
-}) {
-  const span = range[1] - range[0];
-  const start = range[0] + (index / total) * span * 0.85;
-  const end = Math.min(range[0] + ((index + 1) / total) * span * 0.85 + span * 0.12, range[1]);
-  const active = accent ? BRAND_RGB : ACTIVE_RGB;
-
-  const color = useTransform(progress, (value) => {
-    const t = (value - start) / (end - start);
-    return lerpRgb(MUTED_RGB, active, t);
-  });
+function AmbientGlow({ progress }: { progress: MotionValue<number> }) {
+  const x = useTransform(progress, [0, 1], ["18%", "72%"]);
+  const opacity = useTransform(progress, [0, 0.35, 0.7, 1], [0.35, 0.55, 0.45, 0.3]);
 
   return (
-    <motion.span style={{ color }} className="inline">
-      {word}{" "}
-    </motion.span>
+    <motion.div
+      aria-hidden
+      style={{ left: x, opacity }}
+      className="pointer-events-none absolute top-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,92,0,0.28)_0%,rgba(255,92,0,0.08)_42%,transparent_70%)] blur-2xl"
+    />
   );
 }
 
-function StatementBlock({
-  eyebrow,
-  text,
-  progress,
-  range,
-  accentEyebrow,
+function StatementColumn({
+  statement,
+  index,
 }: {
-  eyebrow: string;
-  text: string;
-  progress: MotionValue<number>;
-  range: [number, number];
-  accentEyebrow?: boolean;
+  statement: Statement;
+  index: number;
 }) {
-  const words = text.split(/\s+/);
-
   return (
-    <div className="mx-auto max-w-4xl text-center">
-      <p
-        className={`mb-8 font-serif text-lg italic sm:mb-10 sm:text-xl ${
-          accentEyebrow ? c.text.brand : c.text.muted
+    <RevealItem
+      variant="fadeUp"
+      className={`relative flex flex-col ${
+        index === 0 ? "lg:pr-10 xl:pr-14" : "lg:pl-10 xl:pl-14"
+      }`}
+    >
+      <div className="mb-6 flex items-baseline gap-4 sm:mb-8">
+        <span
+          className={`text-sm font-medium uppercase tracking-[0.22em] ${
+            statement.accent ? c.text.brand : "text-white/55"
+          }`}
+        >
+          {statement.label}
+        </span>
+      </div>
+
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.75, delay: 0.15 + index * 0.12, ease: revealEase }}
+        style={{ originX: 0 }}
+        className={`mb-7 h-px w-16 sm:mb-8 ${
+          statement.accent ? "bg-brand-primary" : "bg-white/30"
         }`}
-      >
-        {eyebrow}
+      />
+
+      <p className="max-w-md text-[1.05rem] leading-[1.7] text-white/78 sm:text-lg sm:leading-[1.75]">
+        {statement.body}
       </p>
-      <p className="text-[clamp(1.65rem,4vw,2.75rem)] font-semibold leading-[1.25] tracking-[-0.02em]">
-        {words.map((word, index) => (
-          <ScrollWord
-            key={`${eyebrow}-${word}-${index}`}
-            word={word}
-            index={index}
-            total={words.length}
-            progress={progress}
-            range={range}
-            accent={accentEyebrow}
-          />
-        ))}
-      </p>
-    </div>
+    </RevealItem>
   );
 }
 
 export function AboutMissionVisionSection() {
-  const scrollTrackRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
-    target: scrollTrackRef,
-    offset: ["start start", "end end"],
+    target: sectionRef,
+    offset: ["start end", "end start"],
   });
 
-  const missionOpacity = useTransform(scrollYProgress, [0, 0.12, 0.42, 0.52], [1, 1, 1, 0]);
-  const missionY = useTransform(scrollYProgress, [0.4, 0.55], [0, -36]);
-  const visionOpacity = useTransform(scrollYProgress, [0.45, 0.55, 1], [0, 1, 1]);
-  const visionY = useTransform(scrollYProgress, [0.45, 0.58], [40, 0]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [36, -36]);
 
   return (
-    <section ref={scrollTrackRef} className={`relative min-h-[220vh] ${c.bg.page}`}>
-      <div className="sticky top-0 flex min-h-[100vh] flex-col items-center justify-center px-4 py-16 sm:px-6 lg:px-10">
-        <motion.div style={{ opacity: missionOpacity, y: missionY }} className="absolute inset-x-0 flex justify-center px-4">
-          <StatementBlock
-            eyebrow="(Mission)"
-            text={mission}
-            progress={scrollYProgress}
-            range={[0, 0.48]}
-          />
-        </motion.div>
+    <section
+      ref={sectionRef}
+      className={`relative overflow-hidden ${c.bg.inverse} ${c.text.inverse}`}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_-10%,rgba(255,92,0,0.16),transparent_55%),linear-gradient(180deg,rgba(255,255,255,0.04)_0%,transparent_28%,transparent_72%,rgba(0,0,0,0.35)_100%)]"
+      />
+      <AmbientGlow progress={scrollYProgress} />
 
-        <motion.div style={{ opacity: visionOpacity, y: visionY }} className="absolute inset-x-0 flex justify-center px-4">
-          <StatementBlock
-            eyebrow="(Vision)"
-            text={vision}
-            progress={scrollYProgress}
-            range={[0.5, 1]}
-            accentEyebrow
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(255,255,255,0.65)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.65)_1px,transparent_1px)] [background-size:72px_72px]"
+      />
+
+      <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-28">
+        <Reveal variant="fadeUp" className="mb-14 sm:mb-16 lg:mb-20">
+          <SectionHeading
+            title="Purpose that"
+            accent="scales"
+            tone="dark"
+            animate={false}
+            // description="Creative that looks premium. Strategy that moves the numbers. One north star for every brand we build."
+            className="max-w-3xl"
           />
+        </Reveal>
+
+        <motion.div style={{ y: gridY }} className="relative">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-y-2 left-1/2 hidden w-px -translate-x-1/2 bg-linear-to-b from-transparent via-white/20 to-transparent lg:block"
+          />
+
+          <Stagger
+            className="grid gap-14 sm:gap-16 lg:grid-cols-2 lg:gap-0"
+            stagger={0.16}
+            delayChildren={0.08}
+          >
+            {statements.map((statement, index) => (
+              <StatementColumn
+                key={statement.label}
+                statement={statement}
+                index={index}
+              />
+            ))}
+          </Stagger>
         </motion.div>
       </div>
     </section>
